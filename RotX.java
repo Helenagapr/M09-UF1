@@ -1,21 +1,26 @@
 public class RotX {
     public final static char[] ABCLOWER= "aàáäbcçdeéèëfghiíìïjklmnñoóòöpqrstuúùüvwxyz".toCharArray();
     public final static char[] ABCUPPER= "AÀÁÄBCÇDEÉÈËFGHIÍÌÏJKLMNÑOÓÒÖPQRSTUÚÙÜVWXYZ".toCharArray();
+    public final static String[] LISTA = {"PapEl", "Hola que hace", "mamAmíÀ", "Me gustÀn las Maanzçanas"};
 
     public static void main(String[] args) {
        String[] lista = {"PapEl", "Hola que hace", "mamAmíÀ", "Me gustÀn las Maanzçanas"};
         int num = 0;
-       for (int i = 0; i < lista.length; i++){
+       for (int i = 0; i < LISTA.length; i++){
             num += 5;
-            String xifrad = xifraRotX(lista[i], num);
+            String xifrad = xifraRotX(LISTA[i], num);
             String desxifrad = desxifraRotX(xifrad, num);
-            System.err.println("Xifra: " + xifrad + "\n" +
-                "Desxifra: " + desxifrad);
+            System.out.println("\n--------------------------------------------\n" +
+                "Cadena a xifrar: " + LISTA[i] + "\n" +
+                "Rotant " + num + " posicions" + "\n" +
+                "Xifrad: " + xifrad + "\n" +
+                "Desxifrad: " + desxifrad + 
+                "\n--------------------------------------------\n" +
+                "Probem a força bruta totes le rotacions: \n");
+                forcaBrutaRotX(xifrad);
+
+            
        }
-       String str = "Sol amarillo";
-       String testXifrad = xifraRotX(str, 22);
-       System.out.println("Xifrant la cadena " + str +" = " +testXifrad);
-       forcaBrutaRotX(testXifrad);
 
     }
 
@@ -71,9 +76,8 @@ public class RotX {
 
     public static void forcaBrutaRotX(String cadenaXifrada){
         int longitud = ABCLOWER.length;
-        System.out.println("Provem totes les posicions posibles");
         for (int i = 0; i < longitud; i++){
-            System.out.println("Desxifrant: " + desxifraRotX(cadenaXifrada, i));
+            System.out.println("["+i+"] Desxifrant: " + desxifraRotX(cadenaXifrada, i));
         }
     } 
 }
