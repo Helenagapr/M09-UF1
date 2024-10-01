@@ -4,7 +4,6 @@ public class RotX {
     public final static String[] LISTA = {"PapEl", "Hola que hace", "mamAmíÀ", "Me gustÀn las Maanzçanas"};
 
     public static void main(String[] args) {
-       String[] lista = {"PapEl", "Hola que hace", "mamAmíÀ", "Me gustÀn las Maanzçanas"};
         int num = 0;
        for (int i = 0; i < LISTA.length; i++){
             num += 5;
@@ -18,8 +17,6 @@ public class RotX {
                 "\n--------------------------------------------\n" +
                 "Probem a força bruta totes le rotacions: \n");
                 forcaBrutaRotX(xifrad);
-
-            
        }
 
     }
