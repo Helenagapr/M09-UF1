@@ -13,6 +13,11 @@ public class Monoalfabetic {
     public static void main(String[] args) {
         inicialitzaListas();
         permutaAlfabet(abcPermutat);
+        String palabra = "PATaTA";
+        System.out.println(palabra);
+        String xifra = xifraMonoAlfa(palabra);
+        String desxifra = desxifraMonoAlfa(xifra);
+        System.out.println(xifra + " " + desxifra);
     }
 
     public static void inicialitzaListas() {
@@ -24,6 +29,38 @@ public class Monoalfabetic {
 
     public static void permutaAlfabet(ArrayList alfabet){
         Collections.shuffle(alfabet);
-        System.out.println(alfabet);
+    }
+
+    public static String xifraMonoAlfa(String str){
+        StringBuffer cadenaXifrada = new StringBuffer();
+        for (int i= 0; i< str.length(); i++){
+            char letra = str.charAt(i);
+            int index = abcOriginal.indexOf(Character.toUpperCase(letra));
+            if(index != -1){
+                if (Character.isUpperCase(letra)){
+                    cadenaXifrada.append(abcPermutat.get(index));
+                } else {
+                cadenaXifrada.append(Character.toLowerCase(((Character) abcPermutat.get(index)).charValue()));
+                }
+            }
+        }
+        return cadenaXifrada.toString();
+    }
+
+    public static String desxifraMonoAlfa(String str){
+        StringBuffer cadenaXifrada = new StringBuffer();
+        for (int i= 0; i< str.length(); i++){
+            char letra = str.charAt(i);
+            int index = abcPermutat.indexOf(Character.toUpperCase(letra));
+            if(index != -1){
+                if (Character.isUpperCase(letra)){
+                    cadenaXifrada.append(abcOriginal.get(index));
+                } else {
+                    cadenaXifrada.append(Character.toLowerCase(((Character) abcOriginal.get(index)).charValue()));
+                }
+            }
+        }
+        
+        return cadenaXifrada.toString();
     }
 }
