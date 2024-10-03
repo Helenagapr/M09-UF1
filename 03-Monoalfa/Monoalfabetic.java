@@ -38,39 +38,42 @@ public class Monoalfabetic {
     }
 
     public static String xifraMonoAlfa(String str){
-        StringBuffer cadenaXifrada = new StringBuffer();
-        for (int i= 0; i< str.length(); i++){
-            char letra = str.charAt(i);
-            int index = abcOriginal.indexOf(Character.toUpperCase(letra));
-            if(index != -1){
-                if (Character.isUpperCase(letra)){
-                    cadenaXifrada.append(abcPermutat.get(index));
-                } else {
-                cadenaXifrada.append(Character.toLowerCase(((Character) abcPermutat.get(index)).charValue()));
-                }
-            }else {
-                cadenaXifrada.append(letra);
-            }
-        }
-        return cadenaXifrada.toString();
+        return monoAlfabet(str, true);
     }
 
     public static String desxifraMonoAlfa(String str){
+        return monoAlfabet(str, false);
+    }
+
+    public static String monoAlfabet(String str, boolean pos){
+        
         StringBuffer cadenaXifrada = new StringBuffer();
         for (int i= 0; i< str.length(); i++){
             char letra = str.charAt(i);
-            int index = abcPermutat.indexOf(Character.toUpperCase(letra));
+            int index;
+            if(pos){
+                index = abcOriginal.indexOf(Character.toUpperCase(letra));
+            } else {
+                index = abcPermutat.indexOf(Character.toUpperCase(letra));
+            }
             if(index != -1){
                 if (Character.isUpperCase(letra)){
-                    cadenaXifrada.append(abcOriginal.get(index));
+                    if (pos) {
+                        cadenaXifrada.append(abcPermutat.get(index));
+                    }else {
+                        cadenaXifrada.append(abcOriginal.get(index));
+                    }
                 } else {
-                    cadenaXifrada.append(Character.toLowerCase(((Character) abcOriginal.get(index)).charValue()));
+                    if(pos){
+                        cadenaXifrada.append(Character.toLowerCase(((Character) abcPermutat.get(index)).charValue()));
+                    }else {
+                        cadenaXifrada.append(Character.toLowerCase(((Character) abcOriginal.get(index)).charValue()));
+                    }
                 }
             }else {
                 cadenaXifrada.append(letra);
             }
         }
-        
         return cadenaXifrada.toString();
     }
 }
