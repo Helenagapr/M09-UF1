@@ -12,12 +12,18 @@ public class Monoalfabetic {
 
     public static void main(String[] args) {
         inicialitzaListas();
+        System.out.println("Permutem el abecedari");
         permutaAlfabet(abcPermutat);
-        String palabra = "PATaTA";
-        System.out.println(palabra);
-        String xifra = xifraMonoAlfa(palabra);
-        String desxifra = desxifraMonoAlfa(xifra);
-        System.out.println(xifra + " " + desxifra);
+        
+        for(int i = 0; i< LISTA.size(); i++){
+            System.out.println("\n-------------------------------");
+            System.out.println("Cadena: " + LISTA.get(i));
+            String xifra = xifraMonoAlfa(LISTA.get(i).toString());
+            String desxifra = desxifraMonoAlfa(xifra);
+            System.out.println("Xifrad: " +  xifra + "\n" + 
+            "Desxifrad: " + desxifra);
+            System.out.println("-------------------------------\n");
+            }
     }
 
     public static void inicialitzaListas() {
@@ -42,6 +48,8 @@ public class Monoalfabetic {
                 } else {
                 cadenaXifrada.append(Character.toLowerCase(((Character) abcPermutat.get(index)).charValue()));
                 }
+            }else {
+                cadenaXifrada.append(letra);
             }
         }
         return cadenaXifrada.toString();
@@ -58,6 +66,8 @@ public class Monoalfabetic {
                 } else {
                     cadenaXifrada.append(Character.toLowerCase(((Character) abcOriginal.get(index)).charValue()));
                 }
+            }else {
+                cadenaXifrada.append(letra);
             }
         }
         
