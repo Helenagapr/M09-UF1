@@ -1,7 +1,5 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 public class Polialfabetic {
@@ -12,6 +10,7 @@ public class Polialfabetic {
     public static ArrayList abcPermutat = new ArrayList<Character>();
     public static Random random;
     public static void main(String[] args) {
+        inicialitzaListas();
         String msgs[] = {"Test 01 àrbritre, coixí, Perímetre", "Test 02 Taüll, DÍA, año", "Test 03 Peça, Òrrius, Bòvila"};
         String msgsXifrats[] = new String[msgs.length];
 
@@ -31,6 +30,8 @@ public class Polialfabetic {
     }
 
     public static void inicialitzaListas() {
+        abcOriginal.clear();
+        abcPermutat.clear();
         for(char c: ABC){
             abcOriginal.add(c);
             abcPermutat.add(c);
