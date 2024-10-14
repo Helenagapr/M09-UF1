@@ -10,7 +10,6 @@ public class Polialfabetic {
     public static ArrayList abcPermutat = new ArrayList<Character>();
     public static Random random;
     public static void main(String[] args) {
-        inicialitzaListas();
         String msgs[] = {"Test 01 àrbritre, coixí, Perímetre", "Test 02 Taüll, DÍA, año", "Test 03 Peça, Òrrius, Bòvila"};
         String msgsXifrats[] = new String[msgs.length];
 
@@ -47,11 +46,14 @@ public class Polialfabetic {
     }
 
     public static String xifraPoliAlfa(String str) {
+        inicialitzaListas();
         return poliAlfa(str, true);
+        
     }
 
     public static String desxifraPoliAlfa(String str) {
-        return poliAlfa(str, false);
+        inicialitzaListas();
+        return poliAlfa(str, false); 
     }
 
     public static String poliAlfa(String str, boolean pos){
