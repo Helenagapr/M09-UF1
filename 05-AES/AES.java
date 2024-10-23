@@ -1,16 +1,9 @@
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.NoSuchAlgorithmException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.util.Base64;
 import javax.crypto.spec.IvParameterSpec;
 import java.security.SecureRandom;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 public class AES {
@@ -20,7 +13,7 @@ public class AES {
 
     private static final int MIDA_IV = 16;
     private static byte[] iv = new byte[MIDA_IV];
-    private static final String CLAU = "LaClauSecretaQueVulguis";
+    private static final String CLAU = "lavacalola";
 
     public static void main(String[] args) {
         String msgs[] = {"Lorem ipsum dicet", "Hola Andrés cómo está tu cuñado", "Àgora ïlla Ôtto"};
@@ -69,15 +62,22 @@ public class AES {
     public static String desxifraAES(byte[] bIvIMsgXifrat, String clau) throws Exception {
 
         // Extreure l'IV.
-        byte[] iv = extractIv(bIvIMsgXifrat);
-        byte[] encryptedMessage = Arrays.copyOfRange(bIvIMsgXifrat, iv.length, bIvIMsgXifrat.length);
+        byte[] iv = extractIv(bIvIMsgXifrat);     
+
         // Extreure la part xifrada.
+        byte[] encryptedMessage = Arrays.copyOfRange(bIvIMsgXifrat, iv.length, bIvIMsgXifrat.length);
 
         // Fer hash de la clau
+        SecretKeySpec secretKey = generateHash(clau);
 
         // Desxifrar.
+        IvParameterSpec ivSpec = new IvParameterSpec(iv);
+        Cipher cipher = Cipher.getInstance(FORMAT_AES);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
+        byte[] decryptedBytes = cipher.doFinal(encryptedMessage);
 
         // return String desxifrat
+        return new String(decryptedBytes, "UTF-8");
     }
 
     public static IvParameterSpec createIv() throws Exception {
@@ -110,7 +110,19 @@ public class AES {
         return iv; // Devolver el IV
     }
     
+    private static SecretKeySpec generateHash(String clau) throws Exception {
+        // Obtener los bytes de la clave
+        byte[] clauBytes = clau.getBytes("UTF-8");
 
+        // Crear un MessageDigest con el algoritmo SHA-256
+        MessageDigest sha = MessageDigest.getInstance(ALGORISME_HASH);
+
+        // Aplicar el hash a la clave
+        byte[] keyHash = sha.digest(clauBytes);
+
+        // Crear una clave secreta a partir del hash
+        return new SecretKeySpec(keyHash, ALGORISME_XIFRAT);
+    }
 
     
 }
