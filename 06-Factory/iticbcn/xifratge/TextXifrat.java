@@ -1,17 +1,17 @@
 package iticbcn.xifratge;
 
 public class TextXifrat {
-    private byte[] text;
+    private byte[] data;
 
-    public TextXifrat(byte[] text){
-        this.text = text;
+    public TextXifrat(byte[] data){
+        this.data = data;
     }
 
-    public byte[] getText(){ return text; }
+    public byte[] getBytes(){ return data; }
 
     @Override
     public String toString() {
-        return new String(text.toString());
+        return new String(data);
     }
 
 }

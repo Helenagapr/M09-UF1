@@ -11,24 +11,6 @@ public class XifradorPolialfabetic implements Xifrador{
     public static ArrayList abcOriginal = new ArrayList<Character>();
     public static ArrayList abcPermutat = new ArrayList<Character>();
     public static Random random;
-    public static void main(String[] args) {
-        String msgs[] = {"Test 01 àrbritre, coixí, Perímetre", "Test 02 Taüll, DÍA, año", "Test 03 Peça, Òrrius, Bòvila"};
-        String msgsXifrats[] = new String[msgs.length];
-
-        System.out.println("Xifratge:\n--------");
-        for (int i = 0; i < msgs.length; i++) {
-            initRandom(clauSecreta);
-            msgsXifrats[i] = xifraPoliAlfa(msgs[i]);
-            System.out.printf("%-34s -> %s%n", msgs[i], msgsXifrats[i]);
-        }
-
-        System.out.println("Desxifratge:\n-----------");
-        for (int i = 0; i < msgs.length; i++) {
-            initRandom(clauSecreta);
-            String msg = desxifraPoliAlfa(msgsXifrats[i]);
-            System.out.printf("%-34s -> %s%n", msgsXifrats[i], msg);
-        }
-    }
 
     public static void inicialitzaListas() {
         abcOriginal.clear();
@@ -39,7 +21,7 @@ public class XifradorPolialfabetic implements Xifrador{
         }
     }
 
-    public static void initRandom(int clauSecreta) {
+    public static void initRandom(long clauSecreta) {
         random = new Random(clauSecreta);
     }
 
@@ -93,14 +75,28 @@ public class XifradorPolialfabetic implements Xifrador{
 
     @Override
     public TextXifrat xifra(String msg, String clau) throws ClauNoSuportada {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'xifra'");
+        try {
+            long clauLong = Long.parseLong(clau); 
+            initRandom(clauLong); 
+            inicialitzaListas(); 
+            String resultado = poliAlfa(msg, true); 
+            return new TextXifrat(resultado.getBytes()); 
+        } catch (NumberFormatException e) {
+            throw new ClauNoSuportada("La clau per xifrat Polialfabètic ha de ser un String convertible a long.");
+        }
     }
 
     @Override
     public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'desxifra'");
+        try {
+            long clauLong = Long.parseLong(clau); 
+            initRandom(clauLong); 
+            inicialitzaListas(); 
+            String msgCifrado = new String(xifrat.getBytes()); 
+            return poliAlfa(msgCifrado, false); 
+        } catch (NumberFormatException e) {
+            throw new ClauNoSuportada("La clau per desxifrat Polialfabètic ha de ser un String convertible a long.");
+        }
     }
 
 }

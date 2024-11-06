@@ -6,37 +6,27 @@ import java.util.Collections;
 import java.util.List;
 
 public class XifradorMonoalfabetic implements Xifrador{
-    public final static char[] ABC= "AÀÁÄBCÇDEÉÈËFGHIÍÌÏJKLMNÑOÓÒÖPQRSTUÚÙÜVWXYZ".toCharArray();
 
-    public final static List LISTA = Arrays.asList("La gata", "Monotomia", "Helena García", "yogürt");
+    public final static char[] ABC= "AÀÁÄBCÇDEÉÈËFGHIÍÌÏJKLMNÑOÓÒÖPQRSTUÚÙÜVWXYZ".toCharArray();
     public static ArrayList abcOriginal = new ArrayList<Character>();
     public static ArrayList abcPermutat = new ArrayList<Character>();
 
-    public static void main(String[] args) {
+    static {
         inicialitzaListas();
-        System.out.println("Permutem el abecedari");
-        permutaAlfabet(abcPermutat);
-        
-        for(int i = 0; i< LISTA.size(); i++){
-            System.out.println("\n-------------------------------");
-            System.out.println("Cadena: " + LISTA.get(i));
-            String xifra = xifraMonoAlfa(LISTA.get(i).toString());
-            String desxifra = desxifraMonoAlfa(xifra);
-            System.out.println("Xifrad: " +  xifra + "\n" + 
-            "Desxifrad: " + desxifra);
-            System.out.println("-------------------------------\n");
-            }
+        permutaAlfabet(); 
     }
 
     public static void inicialitzaListas() {
+        abcOriginal.clear();
+        abcPermutat.clear();
         for(char c: ABC){
             abcOriginal.add(c);
             abcPermutat.add(c);
         }
     }
 
-    public static void permutaAlfabet(ArrayList alfabet){
-        Collections.shuffle(alfabet);
+    public static void permutaAlfabet(){
+        Collections.shuffle(abcPermutat);
     }
 
     public static String xifraMonoAlfa(String str){
@@ -81,13 +71,19 @@ public class XifradorMonoalfabetic implements Xifrador{
 
     @Override
     public TextXifrat xifra(String msg, String clau) throws ClauNoSuportada {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'xifra'");
+        if (clau != null) {
+            throw new ClauNoSuportada("Xifratge monoalfabètic no suporta clau != null");
+        }
+        String resultado = monoAlfabet(msg, true);
+        return new TextXifrat(resultado.getBytes());
     }
 
     @Override
     public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'desxifra'");
+        if (clau != null) {
+            throw new ClauNoSuportada("Xifratge monoalfabètic no suporta clau != null");
+        }
+        String msgCifrado = new String(xifrat.getBytes());
+        return monoAlfabet(msgCifrado, false);
     }
 }

@@ -3,33 +3,44 @@ package iticbcn.xifratge;
 public class XifradorRotX implements Xifrador{
     public final static char[] ABCLOWER= "aàáäbcçdeéèëfghiíìïjklmnñoóòöpqrstuúùüvwxyz".toCharArray();
     public final static char[] ABCUPPER= "AÀÁÄBCÇDEÉÈËFGHIÍÌÏJKLMNÑOÓÒÖPQRSTUÚÙÜVWXYZ".toCharArray();
-    public final static String[] LISTA = {"PapEl", "Hola que hace", "mamAmíÀ", "Me gustÀn las Maanzçanas"};
 
-    public static void main(String[] args) {
-        int num = 0;
-       for (int i = 0; i < LISTA.length; i++){
-            num += 5;
-            String xifrad = xifraRotX(LISTA[i], num);
-            String desxifrad = desxifraRotX(xifrad, num);
-            System.out.println("\n--------------------------------------------\n" +
-                "Cadena a xifrar: " + LISTA[i] + "\n" +
-                "Rotant " + num + " posicions" + "\n" +
-                "Xifrad: " + xifrad + "\n" +
-                "Desxifrad: " + desxifrad + 
-                "\n--------------------------------------------\n" +
-                "Probem a força bruta totes le rotacions: \n");
-                forcaBrutaRotX(xifrad);
-       }
 
+    @Override
+    public TextXifrat xifra(String msg, String clau) throws ClauNoSuportada {
+        try {
+            int num = Integer.parseInt(clau); // Convertimos clau a int
+
+            // Validación de la clave
+            if (num < 0 || num > 40) {
+                throw new ClauNoSuportada("Clau de RotX ha de ser un sencer de 0 a 40");
+            }
+
+            String resultado = rotX(msg, true, num); // Ciframos el mensaje
+            return new TextXifrat(resultado.getBytes()); // Convertimos a TextXifrat
+
+        } catch (NumberFormatException e) {
+            throw new ClauNoSuportada("Clau de RotX ha de ser un sencer de 0 a 40");
+        }
     }
 
-    public static String xifraRotX(String str, int num) {
-        return rotX(str, true, num);
-    }
+    @Override
+    public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
+        try {
+            int num = Integer.parseInt(clau); // Convertimos clau a int
 
-    public static String desxifraRotX(String str, int num){
-        return rotX(str, false, num);
-    }
+            // Validación de la clave
+            if (num < 0 || num > 40) {
+                throw new ClauNoSuportada("Clau de RotX ha de ser un sencer de 0 a 40");
+            }
+
+            String msgCifrado = new String(xifrat.getBytes()); // Extraemos el mensaje cifrado
+            return rotX(msgCifrado, false, num); // Desciframos el mensaje
+
+        } catch (NumberFormatException e) {
+            throw new ClauNoSuportada("Clau de RotX ha de ser un sencer de 0 a 40");
+        }
+    } 
+
 
     public static String rotX(String str, boolean pos, int num){
         StringBuffer cadenaXifrada = new StringBuffer();
@@ -37,15 +48,15 @@ public class XifradorRotX implements Xifrador{
             char letra = str.charAt(i);
             int index = new String(ABCUPPER).indexOf(letra);
             if (index != -1) { // es mayuscula
-                if(pos){
-                    index += num;
-                    if (index > ABCUPPER.length-1){
-                        index -= ABCUPPER.length;
+                if (pos) {
+                    index = (index + num) % ABCUPPER.length;  // Calculamos el nuevo índice
+                    if (index < 0) {
+                        index += ABCUPPER.length;  // Aseguramos que sea positivo
                     }
                 } else {
-                    index -= num;
-                    if(index < 0){
-                        index += ABCUPPER.length;
+                    index = (index - num) % ABCUPPER.length;  // Calculamos el nuevo índice
+                    if (index < 0) {
+                        index += ABCUPPER.length;  // Aseguramos que sea positivo
                     }
                 }
                 cadenaXifrada.append(ABCUPPER[index]);
@@ -53,15 +64,15 @@ public class XifradorRotX implements Xifrador{
             } else {
                 index = new String(ABCLOWER).indexOf(letra);
                 if ( index != -1) { // es minuscula
-                    if(pos){
-                        index += num;
-                        if (index > ABCLOWER.length-1){
-                            index -= ABCLOWER.length;
+                    if (pos) {
+                        index = (index + num) % ABCLOWER.length;  // Calculamos el nuevo índice
+                        if (index < 0) {
+                            index += ABCLOWER.length;  // Aseguramos que sea positivo
                         }
                     } else {
-                        index -= num;
-                        if(index < 0){
-                            index += ABCLOWER.length;
+                        index = (index - num) % ABCLOWER.length;  // Calculamos el nuevo índice
+                        if (index < 0) {
+                            index += ABCLOWER.length;  // Aseguramos que sea positivo
                         }
                     }
                     cadenaXifrada.append(ABCLOWER[index]);
@@ -72,23 +83,5 @@ public class XifradorRotX implements Xifrador{
         }
         return cadenaXifrada.toString();
     }
-
-    public static void forcaBrutaRotX(String cadenaXifrada){
-        int longitud = ABCLOWER.length;
-        for (int i = 0; i < longitud; i++){
-            System.out.println("["+i+"] Desxifrant: " + desxifraRotX(cadenaXifrada, i));
-        }
-    }
-
-    @Override
-    public TextXifrat xifra(String msg, String clau) throws ClauNoSuportada {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'xifra'");
-    }
-
-    @Override
-    public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'desxifra'");
-    } 
+    
 }
