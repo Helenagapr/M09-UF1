@@ -8,12 +8,13 @@
     <artifactId>xifratgepk</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <dependency>
-        <groupId>com.xml.bind</groupId>
-        <artifactId>jaxb-impl</artifactId>
-        <version>2.3.2</version>
-    </dependency>
-
+    <dependencies>
+        <dependency> 
+            <groupId>javax.xml.bind</groupId> 
+            <artifactId>jaxb-api</artifactId> 
+            <version>2.3.1</version> 
+        </dependency> 
+    </dependencies>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
