@@ -1,5 +1,6 @@
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.HexFormat;
 
 import javax.crypto.SecretKeyFactory;
@@ -48,34 +49,68 @@ public class Hashes {
     }
 
     public String forcaBruta(String alg, String hash, String salt){
-        String charset = "abcdefABCDEF1234567890!";  // Conjunt de caràcters
-        char[] pw = new char[6];  // Array per formar contrasenyes de fins a 6 caràcters
-        String foundPassword = null;
-        
-        // Bucle per cada longitud de contrasenya (de 1 a 6)
-        for (int len = 1; len <= 6; len++) {
-            for (int i = 0; i < Math.pow(charset.length(), len); i++) {
-                // Convertir el nombre a la contrasenya corresponent
-                for (int j = 0; j < len; j++) {
-                    pw[j] = charset.charAt((i / (int) Math.pow(charset.length(), j)) % charset.length());
-                }
-                
-                String generatedPassword = new String(pw, 0, len);
-                String generatedHash = (alg.equals("SHA-512")) ? getSHA512AmbSalt(generatedPassword, salt) : getPBKDF2AmbSalt(generatedPassword, salt);
-                
-                npass++;  // Incrementem el comptador de contrasenyes provades
-                
-                if (generatedHash.equals(hash)) {
-                    foundPassword = generatedPassword;
-                    return foundPassword;  // Retornem la contrasenya trobada
+        // Definición del conjunto de caracteres a usar
+        char[] charset = "abcdefABCDEF1234567890!".toCharArray();
+        char[] guess = new char[6];  // Array para la contraseña generada
+        npass = 0;  // Reiniciar el contador de contraseñas probadas
+
+        // Bucle para probar todas las combinaciones de contraseñas de 6 caracteres
+        for (int i1 = 0; i1 < charset.length; i1++) {
+            guess[0] = charset[i1];
+            for (int i2 = 0; i2 < charset.length; i2++) {
+                guess[1] = charset[i2];
+                for (int i3 = 0; i3 < charset.length; i3++) {
+                    guess[2] = charset[i3];
+                    for (int i4 = 0; i4 < charset.length; i4++) {
+                        guess[3] = charset[i4];
+                        for (int i5 = 0; i5 < charset.length; i5++) {
+                            guess[4] = charset[i5];
+                            for (int i6 = 0; i6 < charset.length; i6++) {
+                                guess[5] = charset[i6];
+                                
+                                // Convertir el array 'guess' a una cadena de texto
+                                String guessStr = new String(guess);
+                                
+                                // Generar el hash de la contraseña tentativa
+                                String hashedGuess;
+                                if (alg.equals("SHA-512")) {
+                                    hashedGuess = getSHA512AmbSalt(guessStr, salt);
+                                } else {
+                                    hashedGuess = getPBKDF2AmbSalt(guessStr, salt);
+                                }
+
+                                npass++;  // Incrementar el contador de contraseñas probadas
+
+                                // Comprobar si el hash generado coincide con el proporcionado
+                                if (hashedGuess.equals(hash)) {
+                                    return guessStr;  // Retornar la contraseña correcta
+                                }
+                            }
+                        }
+                    }
                 }
             }
-        }
-        return foundPassword;  // Si no es troba, retornem null
+        }   
+        return null;
     }
     public String getInterval(long t1, long t2){
-        long interval = t2 - t1;
-        return String.format("%d ms", interval);
+        long interval = t2 - t1;  // Calculamos el intervalo en milisegundos
+    
+        // Convertir el intervalo a días, horas, minutos, segundos y milisegundos
+        long days = interval / (1000 * 60 * 60 * 24);
+        interval %= (1000 * 60 * 60 * 24);  // Resto de milisegundos después de los días
+        
+        long hours = interval / (1000 * 60 * 60);
+        interval %= (1000 * 60 * 60);  // Resto de milisegundos después de las horas
+        
+        long minutes = interval / (1000 * 60);
+        interval %= (1000 * 60);  // Resto de milisegundos después de los minutos
+        
+        long seconds = interval / 1000;
+        long millis = interval % 1000;  // Los milisegundos restantes
+        
+        // Formatear el intervalo en el formato deseado
+        return String.format("%d dies / %d hores / %d minuts / %d segons / %d millis", days, hours, minutes, seconds, millis);
     }
 
     public static void main(String[] args) throws Exception {
