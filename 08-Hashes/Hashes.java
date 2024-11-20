@@ -10,12 +10,10 @@ import javax.crypto.spec.PBEKeySpec;
 
 public class Hashes {
     int npass = 0;
-        public static long t1;
         public List<String> combinations;
         public char[] forcaBruta = {'a','b','c','d','e','f','A','B','C','D','E','F','1','2','3','4','5','6','7','8','9','0','!'};
     
         public Hashes(){
-            t1 = System.currentTimeMillis();
             generateCombinations();
         }
     
@@ -56,7 +54,7 @@ public class Hashes {
                 System.out.printf("Hash: %s\n",aHashes[i]);
                 System.out.printf("---------------------------\n");
                 System.out.printf("-- Inici de força bruta ---\n");
-                
+                long t1 = System.currentTimeMillis();
                 pwTrobat = h.forcaBruta(algorismes[i], aHashes[i], salt);
                 long t2 = System.currentTimeMillis();
                 
