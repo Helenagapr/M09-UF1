@@ -11,7 +11,8 @@ import javax.crypto.spec.PBEKeySpec;
 public class Hashes {
     int npass = 0;
     public List<String> combinations;
-    public char[] forcaBruta = {'a','b','c','d','e','f','A','B','C','D','E','F','1','2','3','4','5','6','7','8','9','0','!'};
+    public char[] forcaBruta = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!".toCharArray();
+
 
     public Hashes(){
         generateCombinations();
@@ -75,6 +76,7 @@ public class Hashes {
             HexFormat hex = HexFormat.of();
             return hex.formatHex(hash);
         } catch (NoSuchAlgorithmException e) {
+            System.err.println("Error: No se encontró el algoritmo SHA-512.");
             e.printStackTrace();
             return null;
         }
@@ -101,6 +103,7 @@ public class Hashes {
             HexFormat hex = HexFormat.of();
             return hex.formatHex(hash);
         } catch (Exception  e) {
+            System.err.println("Error: No se encontró el algoritmo PBKDF2.");
             e.printStackTrace();
             return null;
         }
@@ -120,9 +123,8 @@ public class Hashes {
 
             if (candidateHash != null && candidateHash.equals(hash)) {
                 return pwd;
-            }else{
-                npass ++;
             }
+            npass++;
         }
         return null;  // Si no es troba, retornem null
 
