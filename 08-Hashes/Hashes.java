@@ -108,6 +108,8 @@ public class Hashes {
 
     public String forcaBruta(String alg, String hash, String salt){
 
+        npass = 0;
+        
         for (String pwd : combinations) {
             String candidateHash = null;
             if (alg.equals("SHA-512")) {
