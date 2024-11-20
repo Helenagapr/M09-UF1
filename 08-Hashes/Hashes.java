@@ -11,8 +11,7 @@ import javax.crypto.spec.PBEKeySpec;
 public class Hashes {
     int npass = 0;
     public List<String> combinations;
-    public char[] forcaBruta = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!".toCharArray();
-
+    public char[] forcaBruta = {'a','b','c','d','e','f','A','B','C','D','E','F','1','2','3','4','5','6','7','8','9','0','!'};
 
     public Hashes(){
         generateCombinations();
