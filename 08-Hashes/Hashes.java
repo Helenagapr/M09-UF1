@@ -10,59 +10,59 @@ import javax.crypto.spec.PBEKeySpec;
 
 public class Hashes {
     int npass = 0;
-    public List<String> combinations;
-    public char[] forcaBruta = {'a','b','c','d','e','f','A','B','C','D','E','F','1','2','3','4','5','6','7','8','9','0','!'};
-
-    public Hashes(){
-        generateCombinations();
-    }
-
-    private void generateCombinations() {
-        combinations = new ArrayList<>();
-        for (char c1 : forcaBruta) {
-            combinations.add(String.valueOf(c1));
-            for (char c2 : forcaBruta) {
-                combinations.add("" + c1 + c2);
-                for (char c3 : forcaBruta) {
-                    combinations.add("" + c1 + c2 + c3);
-                    for (char c4 : forcaBruta) {
-                        combinations.add("" + c1 + c2 + c3 + c4);
-                        for (char c5 : forcaBruta) {
-                            combinations.add("" + c1 + c2 + c3 + c4 + c5);
-                            for (char c6 : forcaBruta) {
-                                combinations.add("" + c1 + c2 + c3 + c4 + c5 + c6);
+        public static long t1;
+        public List<String> combinations;
+        public char[] forcaBruta = {'a','b','c','d','e','f','A','B','C','D','E','F','1','2','3','4','5','6','7','8','9','0','!'};
+    
+        public Hashes(){
+            t1 = System.currentTimeMillis();
+            generateCombinations();
+        }
+    
+        private void generateCombinations() {
+            combinations = new ArrayList<>();
+            for (char c1 : forcaBruta) {
+                combinations.add(String.valueOf(c1));
+                for (char c2 : forcaBruta) {
+                    combinations.add("" + c1 + c2);
+                    for (char c3 : forcaBruta) {
+                        combinations.add("" + c1 + c2 + c3);
+                        for (char c4 : forcaBruta) {
+                            combinations.add("" + c1 + c2 + c3 + c4);
+                            for (char c5 : forcaBruta) {
+                                combinations.add("" + c1 + c2 + c3 + c4 + c5);
+                                for (char c6 : forcaBruta) {
+                                    combinations.add("" + c1 + c2 + c3 + c4 + c5 + c6);
+                                }
                             }
                         }
                     }
                 }
             }
         }
-        System.out.println(combinations.size());
-    }
-
-    public static void main(String[] args) throws Exception {
-        String salt = "qpoweiruañslkdfjz";
-        String pw = "aaabF!";
-        Hashes h = new Hashes();
-
-        String[] aHashes = { h.getSHA512AmbSalt(pw, salt), h.getPBKDF2AmbSalt(pw, salt) };
-        String pwTrobat = null;
-        String[] algorismes = {"SHA-512", "PBKDF2"};
-
-        for(int i=0; i< aHashes.length; i++){
-            System.out.printf("===========================\n");
-            System.out.printf("Algorisme: %s\n", algorismes[i]);
-            System.out.printf("Hash: %s\n",aHashes[i]);
-            System.out.printf("---------------------------\n");
-            System.out.printf("-- Inici de força bruta ---\n");
-            
-            long t1 = System.currentTimeMillis();
-            pwTrobat = h.forcaBruta(algorismes[i], aHashes[i], salt);
-            long t2 = System.currentTimeMillis();
-            
-            System.out.printf("Pass : %s\n", pwTrobat);
-            System.out.printf("Provats: %d\n", h.npass);
-            System.out.printf("Temps : %s\n", h.getInterval(t1, t2));
+    
+        public static void main(String[] args) throws Exception {
+            String salt = "qpoweiruañslkdfjz";
+            String pw = "aaabF!";
+            Hashes h = new Hashes();
+    
+            String[] aHashes = { h.getSHA512AmbSalt(pw, salt), h.getPBKDF2AmbSalt(pw, salt) };
+            String pwTrobat = null;
+            String[] algorismes = {"SHA-512", "PBKDF2"};
+    
+            for(int i=0; i< aHashes.length; i++){
+                System.out.printf("===========================\n");
+                System.out.printf("Algorisme: %s\n", algorismes[i]);
+                System.out.printf("Hash: %s\n",aHashes[i]);
+                System.out.printf("---------------------------\n");
+                System.out.printf("-- Inici de força bruta ---\n");
+                
+                pwTrobat = h.forcaBruta(algorismes[i], aHashes[i], salt);
+                long t2 = System.currentTimeMillis();
+                
+                System.out.printf("Pass : %s\n", pwTrobat);
+                System.out.printf("Provats: %d\n", h.npass);
+                System.out.printf("Temps : %s\n", h.getInterval(t1, t2));
             System.out.printf("---------------------------\n\n");
         }
     }
@@ -121,6 +121,7 @@ public class Hashes {
             }
 
             if (candidateHash != null && candidateHash.equals(hash)) {
+                npass++;
                 return pwd;
             }
             npass++;
